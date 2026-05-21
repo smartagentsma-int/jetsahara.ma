@@ -219,7 +219,10 @@ input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:20px;heigh
       <a href="#about" onclick="toggleMob()" class="nav-link" style="font-size:18px;font-family:'Cinzel',serif" data-i18n="nav.about">À propos</a>
       <a href="#contact" onclick="toggleMob()" class="nav-link" style="font-size:18px;font-family:'Cinzel',serif" data-i18n="nav.contact">Contact</a>
       <div style="height:1px;background:rgba(200,168,75,.15)"></div>
-      <a href="https://wa.me/212660926664" target="_blank" class="btn-gold" style="padding:14px;border-radius:14px;text-align:center;text-decoration:none;font-size:13px" data-i18n="cta.whatsapp">Réserver sur WhatsApp</a>
+      <a href="https://wa.me/212660926664" target="_blank" class="btn-gold" style="padding:14px;border-radius:14px;text-align:center;text-decoration:none;font-size:13px" data-i18n="cta.whatsapp">Réserver sur WhatsAppp</a>
+    
+
+
     </div>
   </div>
 </nav>
@@ -690,18 +693,19 @@ input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:20px;heigh
           <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px">
             <div>
               <label style="font-size:10px;letter-spacing:.2em;color:var(--muted);text-transform:uppercase;display:block;margin-bottom:6px" data-i18n="form.fname">Prénom</label>
-              <input type="text" placeholder="Mohamed" class="luxury-input">
+              <input type="text" id="ff-name" placeholder="Mohamed" class="luxury-input">
             </div>
             <div>
               <label style="font-size:10px;letter-spacing:.2em;color:var(--muted);text-transform:uppercase;display:block;margin-bottom:6px" data-i18n="form.phone">Téléphone</label>
-              <input type="tel" placeholder="+212 6XX-XXXXXX" class="luxury-input">
+              <input type="tel" id="ff-phone" placeholder="+212 6XX-XXXXXX" class="luxury-input">
             </div>
           </div>
           <div>
             <label style="font-size:10px;letter-spacing:.2em;color:var(--muted);text-transform:uppercase;display:block;margin-bottom:6px" data-i18n="contact.msg">Message</label>
-            <textarea rows="4" class="luxury-input" style="resize:none" placeholder="Je souhaite louer une voiture..."></textarea>
+            <textarea rows="4" id="ff-message" class="luxury-input" style="resize:none" placeholder="Je souhaite louer une voiture..."></textarea>
           </div>
-          <a href="https://wa.me/212660926664" target="_blank" class="btn-gold" style="padding:15px;border-radius:14px;font-size:12px;text-decoration:none;text-align:center;display:block" data-i18n="contact.send">Envoyer sur WhatsApp ↗</a>
+          <a href="https://wa.me/212660926664" id="fast-button-form" target="_blank" class="btn-gold" style="padding:15px;border-radius:14px;font-size:12px;text-decoration:none;text-align:center;display:block" data-i18n="contact.send">.Envoyer sur WhatsApp ... ↗</a>
+          
         </div>
       </div>
     </div>
@@ -1207,5 +1211,148 @@ window.addEventListener('DOMContentLoaded', () => {
   if(fs) fs.addEventListener('change', () => { const fe=document.getElementById('f-end'); if(fe) fe.min=fs.value; });
 });
 </script>
+
+
+
+
+
+<script>
+/* ================================
+   JET SAHARA — WHATSAPP CONFIRM
+================================ */
+
+function confirmReservation() {
+
+  // GET VALUES
+  const vehicle =
+    document.querySelector('select').value || 'Non sélectionné';
+
+  const dates = document.querySelectorAll('input[type="date"]');
+  const startDate = dates[0]?.value || '-';
+  const endDate = dates[1]?.value || '-';
+
+  const selects = document.querySelectorAll('select');
+  const delivery =
+    selects[2]?.value || 'Non défini';
+
+  const textInputs = document.querySelectorAll('input[type="text"]');
+
+  const firstName = textInputs[0]?.value || '';
+  const lastName = textInputs[1]?.value || '';
+
+  const phone =
+    document.querySelector('input[type="tel"]')?.value || '';
+
+  const address =
+    textInputs[2]?.value || '';
+
+  const permit =
+    selects[3]?.value || '';
+
+  // WEBSITE
+  const website =
+    "https://smartagentsma-int.github.io/jetsahara.ma/";
+
+  // MESSAGE
+  const message = `
+🚘 *Nouvelle Demande de Réservation — Jet Sahara Car*
+
+━━━━━━━━━━━━━━━
+
+👤 *Client*
+${firstName} ${lastName}
+
+📞 *Téléphone*
+${phone}
+
+📍 *Adresse Livraison*
+${address}
+
+━━━━━━━━━━━━━━━
+
+🚗 *Véhicule*
+${vehicle}
+
+📅 *Période*
+${startDate} → ${endDate}
+
+📍 *Lieu de Livraison*
+${delivery}
+
+🪪 *Ancienneté Permis*
+${permit}
+
+━━━━━━━━━━━━━━━
+
+🌐 *Site Web*
+${website}
+
+Merci 🙏
+`.trim();
+
+  // ENCODE
+  const encodedMessage = encodeURIComponent(message);
+
+  // WHATSAPP URL
+  const whatsappURL =
+    `https://wa.me/212660926664?text=${encodedMessage}`;
+
+  // FIND BUTTON
+  const confirmBtn =
+    document.getElementById('confirmReservationBtn');
+
+  // REPLACE BUTTON
+  confirmBtn.outerHTML = `
+    <a href="${whatsappURL}"
+       target="_blank"
+       class="inline-flex items-center justify-center gap-3 px-8 py-4 rounded-2xl bg-[#c8a45d] text-black font-semibold text-lg hover:scale-[1.02] transition-all duration-300 shadow-[0_10px_30px_rgba(200,164,93,0.35)]">
+
+      Confirmer sur WhatsApp ↗
+
+    </a>
+  `;
+}
+</script>
+
+<!-- Whatsapp Fast Message  -->
+ <script>
+function updateWhatsAppHref() {
+
+  const name = document.getElementById('ff-name')?.value || '';
+  const phone = document.getElementById('ff-phone')?.value || '';
+  const msg = document.getElementById('ff-message')?.value || '';
+
+  const website = "https://smartagentsma-int.github.io/jetsahara.ma/";
+
+  const text =
+`🚘 Jet Sahara Car — Message Rapide
+
+👤 Nom: ${name}
+📞 Téléphone: ${phone}
+
+💬 Message:
+${msg}
+
+🌐 ${website}`;
+
+  const url = "https://wa.me/212660926664?text=" + encodeURIComponent(text);
+
+  const btn = document.getElementById("fast-button-form");
+
+  console.log("BUTTON FOUND:", btn); // DEBUG
+
+  if (btn) {
+    btn.href = url;
+  }
+}
+</script>
+<script>
+document.addEventListener("input", updateWhatsAppHref);
+document.addEventListener("keyup", updateWhatsAppHref);
+document.addEventListener("change", updateWhatsAppHref);
+</script>
+
+
+
 </body>
 </html>
